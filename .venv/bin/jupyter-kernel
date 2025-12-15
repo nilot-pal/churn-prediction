@@ -1,9 +1,0 @@
-#!/bin/sh
-'''exec' "/home/nilotpal/Documents/ML portfolio prepare/Dec 2025/churn-prediction/.venv/bin/python3" "$0" "$@"
-' '''
-import sys
-from jupyter_client.kernelapp import main
-if __name__ == '__main__':
-    if sys.argv[0].endswith('.exe'):
-        sys.argv[0] = sys.argv[0][:-4]
-    sys.exit(main())
