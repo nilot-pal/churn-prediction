@@ -55,10 +55,14 @@ The project follows an industry-style workflow:
 
 ---
 
-## Repository Structure
+## Directory Structure
+```
 churn-prediction/
 ├── data/
 ├── notebooks/
 │ └── 01_eda.ipynb
 ├── src/
+│   └── (placeholder for reusable preprocessing / modeling code)
 ├── README.md
+```
+
