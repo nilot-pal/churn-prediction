@@ -55,7 +55,7 @@ decision-tree impurity:
 All three models agree on the top features, which is the useful check — a ranking that only one
 model reports is usually an artefact of how that model measures importance.
 
-##  Threshold tuning: the ranking flips
+## Threshold tuning: the ranking flips
 
 Lowering the decision threshold from 0.5 to 0.3:
 
