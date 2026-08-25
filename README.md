@@ -1,25 +1,25 @@
 # Customer churn prediction
 
 Predicting which telecom customers are about to leave, on the IBM Telco dataset. The modelling is
-routine; what this project is actually about is **evaluation** — churn is imbalanced and
+routine; what this project is actually about is **evaluation**: churn is imbalanced and
 cost-asymmetric, so accuracy is close to meaningless and the default 0.5 threshold is arbitrary.
 
 The result worth reading is at the bottom: **which model is best depends on the threshold you
 operate at, and the ranking flips.**
 
-📓 [**`notebooks/churn_end_to_end.ipynb`**](notebooks/churn_end_to_end.ipynb) — the whole project
+📓 [**`notebooks/churn_end_to_end.ipynb`**](notebooks/churn_end_to_end.ipynb), the whole project
 in one notebook: EDA, preprocessing, three models, feature importance, threshold tuning and error
 analysis.
 
 ## Data
 
-IBM Telco Customer Churn — 7,043 customers, ~27% churn. Contract type, tenure, monthly and total
+IBM Telco Customer Churn: 7,043 customers, ~27% churn. Contract type, tenure, monthly and total
 charges, payment method, and which services each customer subscribes to.
 
 ## Preprocessing
 
 Built as a scikit-learn `Pipeline` with a `ColumnTransformer`, so that scaling and encoding are
-fitted **inside** cross-validation rather than on the full dataset — otherwise test data leaks
+fitted **inside** cross-validation rather than on the full dataset, otherwise test data leaks
 into the fit and every score afterwards is optimistic.
 
 `TotalCharges` contains blanks for customers with zero tenure, which read as strings rather than
@@ -36,7 +36,7 @@ Three, all through the same pipeline, split and evaluation protocol:
 | Random forest | 0.84 | 0.55 |
 
 At the default threshold, logistic regression wins. Random forest has the highest **accuracy**
-(0.79) and the highest **precision** (0.65), but its recall drops to 0.48 — it misses over half
+(0.79), and the highest **precision** (0.65), but its recall drops to 0.48, it misses over half
 the churners. Logistic regression, with class weighting, gets recall to 0.76 at precision 0.52.
 
 Similar ROC AUC across all three says they rank churn risk about equally well. The differences are
@@ -47,12 +47,12 @@ in where each one puts its decision boundary, which is a threshold question, not
 From random-forest importances, cross-checked against logistic-regression coefficients and
 decision-tree impurity:
 
-1. **Tenure** — the strongest single predictor; short-tenure customers churn far more
-2. **Month-to-month contract** — one- and two-year contracts push the other way
+1. **Tenure**, the strongest single predictor; short-tenure customers churn far more
+2. **Month-to-month contract**, one- and two-year contracts push the other way
 3. **TotalCharges and MonthlyCharges**
 4. **Payment method**
 
-All three models agree on the top features, which is the useful check — a ranking that only one
+All three models agree on the top features, which is the useful check, a ranking that only one
 model reports is usually an artefact of how that model measures importance.
 
 ## Threshold tuning: the ranking flips
@@ -64,7 +64,7 @@ Lowering the decision threshold from 0.5 to 0.3:
 | Logistic regression | 0.41 | **0.93** | lower than at 0.5 |
 | Random forest | 0.52 | 0.78 | **0.63** |
 
-Logistic regression catches nearly every churner — 93% recall — but at 41% precision, so most
+Logistic regression catches nearly every churner (93% recall), but at 41% precision, so most
 customers flagged for a retention offer were never going to leave. Random forest absorbs the same
 threshold change far better: recall rises to 0.78 while precision holds at 0.52, and its F1 goes
 **up** to 0.63, overtaking logistic regression.
@@ -83,7 +83,7 @@ The random forest's mistakes are not random. They concentrate in **month-to-mont
 **moderate-to-high tenure** rather than among new customers, and at a relatively high average
 monthly charge (~$73) with wide spread.
 
-That is a coherent group — established customers on flexible contracts paying above-average bills.
+That is a coherent group, established customers on flexible contracts paying above-average bills.
 Churn in that segment is driven by something the dataset doesn't contain, likely price sensitivity
 or a service complaint. More model capacity will not fix it; more features would.
 
@@ -102,5 +102,5 @@ Needs `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`. Run the notebo
 ## Notes
 
 Single notebook rather than a `src/` package. For a project this size, splitting the pipeline
-across modules would add indirection without making anything reusable — the notebook keeps each
+across modules would add indirection without making anything reusable, the notebook keeps each
 result next to the reasoning that produced it. A larger project would be organised differently.
